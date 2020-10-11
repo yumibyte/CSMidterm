@@ -37,19 +37,22 @@ public class CSMidterm {
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        while (true) {
+            Scanner sc = new Scanner(System.in);
 
-        System.out.println("What is your username?");
-        String userName = sc.next();
-        Kirby a = new Kirby(userName);
-        Kirby b = new Kirby("yumibyte");
+            System.out.println("Welcome to create a Kirby!\nWhat is your username?>");
+            String userName = sc.next();
+            Kirby a = new Kirby(userName);
+            Kirby b = new Kirby("yumibyte");
 
-        a.skillDamage = 20;
-        a.skillDescription = "hi";
+            a.skillDamage = 20;
+            a.skillDescription = "hi";
 
-        b.skillDamage = 40;
+            b.skillDamage = 40;
 
-        a.readInstances();
+            a.readInstances();
+        }
+
 
     }
 }
