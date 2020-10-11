@@ -1,20 +1,24 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class CSMidterm {
 
     public static class Foods {
-        public static ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
+        private static ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
 
         private String foodName;
         private double healAmount;
 
-        protected void createFood(String foodName, double healAmount) {
-            Foods foods = new Foods();
-            foods.foodName = foodName;
-            foods.healAmount = healAmount;
-            kirbyFoods.add(foods);
+        Foods() {
+            this.foodName = "Maxim Tomato";
+            this.healAmount = 100;
+            kirbyFoods.add(this);
+        }
+
+        Foods(String foodName, double healAmount) {
+            this.foodName = foodName;
+            this.healAmount = healAmount;
+            kirbyFoods.add(this);
         }
 
         protected ArrayList<Foods> readFoods() {
@@ -23,11 +27,21 @@ public class CSMidterm {
     }
 
     public static class Skills extends Foods {
-        public static ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
+        private static ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
 
         private String skillDescription;
         private double skillDamage;
 
+        protected void createDefaultSkill(String skillDescription) {
+            Skills skills = new Skills();
+            skills.skillDescription = skillDescription;
+            skills.skillDamage = 100;
+            kirbySkills.add(skills);
+        }
+
+        Skills(String skillName) {
+
+        }
         protected void createSkill(String skillDescription, double skillDamage) {
             Skills skills = new Skills();
             skills.skillDescription = skillDescription;
@@ -85,7 +99,7 @@ public class CSMidterm {
                 this.offense = "all powerful boss";
             }
 
-            // setup to read KirbyCharacters
+            // read Kirby's stats
             System.out.println("CurrentStats\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
             System.out.println("username: " + this.username);
             System.out.println("health: " + this.health);
@@ -109,9 +123,7 @@ public class CSMidterm {
         Kirby a = new Kirby(username);
         a.readStats();
 
-
         while (true) {
-
             System.out.println("What would you like to do?\n" +
                     "1 - Learn a new skill\n" +
                     "2 - Equip a new food\n" +
@@ -122,22 +134,40 @@ public class CSMidterm {
 
             switch (userInputChoice) {
                 case 1:
-                    System.out.println("Give a short description of your new skill: ");
-                    String skillDescriptionInput = sc.next();
+                    System.out.println("1 - Create your own skill\n " +
+                            "2 - Create default skill");
+                    int optionInput = sc.nextInt();
+                    if (optionInput == 1) {
+                        System.out.println("Give a short description of your new skill: ");
+                        String skillDescriptionInput = sc.next();
 
-                    System.out.println("How much damage does this skill do?:\nEnter a number: ");
-                    double skillDamageInput = sc.nextDouble();
-                    a.createSkill(skillDescriptionInput, skillDamageInput);
+                        System.out.println("How much damage does this skill do?:\nEnter a number: ");
+                        double skillDamageInput = sc.nextDouble();
+                        a.createSkill(skillDescriptionInput, skillDamageInput);
+                    }
+
+
                     a.readStats();
                     break;
 
                 case 2:
-                    System.out.println("What's the name of your food?");
-                    String foodNameInput = sc.next();
+                    System.out.println("1 - Create your own food\n" +
+                            "2 - Create default food");
+                    optionInput = sc.nextInt();
 
-                    System.out.println("How much does your food heal?\nEnter a number:");
-                    double healAmountInput = sc.nextInt();
-                    a.createFood(foodNameInput, healAmountInput);
+                    if (optionInput == 1) {
+                        System.out.println("What's the name of your food?");
+                        String foodNameInput = sc.next();
+
+                        System.out.println("How much does your food heal?\nEnter a number:");
+                        double healAmountInput = sc.nextInt();
+//                        a.createFood(foodNameInput, healAmountInput);
+                        Foods foods = new Foods(foodNameInput, healAmountInput);
+
+                    } else {
+                        Foods foods = new Foods();
+                    }
+
                     a.readStats();
                     break;
                 case 3:
@@ -167,7 +197,5 @@ public class CSMidterm {
                     break;
             }
         }
-
-
     }
 }
