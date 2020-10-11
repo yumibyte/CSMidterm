@@ -1,4 +1,4 @@
 # Developing Kirby Classes!!
 
-* Can create multiple Kirbys with different skills and attack descriptions
+* Can create a Kirby with different skills and attack descriptions with different equippable foods
 
