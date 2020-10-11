@@ -3,24 +3,35 @@ import java.util.Scanner;
 
 public class CSMidterm {
 
+    public static class Foods {
+        public static ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
+
+        private String foodName;
+        private double healAmount;
+
+        Foods(String foodName, double healAmount) {
+            this.foodName = foodName;
+            this.healAmount = healAmount;
+            kirbyFoods.add(this);
+        }
+    }
     public static class Skills {
         public static ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
 
         private String skillDescription;
-        private int skillDamage;
+        private double skillDamage;
 
-        Skills(String skillDescription, int skillDamage) {
+        Skills(String skillDescription, double skillDamage) {
             this.skillDescription = skillDescription;
             this.skillDamage = skillDamage;
             kirbySkills.add(this);
         }
-
     }
 
     public static class Kirby {
 
         private String username;
-        private int health;
+        private double health;
 
         Kirby(String username) {
             this.health = 100;      // Predefined health
@@ -28,9 +39,12 @@ public class CSMidterm {
 //            kirbyCharacters.add(this);
         }
 
-        void createSkill(String skillDescription, int skillDamage) {
+        void createSkill(String skillDescription, double skillDamage) {
             Skills skills = new Skills(skillDescription, skillDamage);
+        }
 
+        void createFood(String foodName, double foodHealh) {
+            Foods foods = new Foods(foodName, foodHealh);
         }
 
         public void readInstances() {
@@ -43,6 +57,12 @@ public class CSMidterm {
                 // TODO: change to read from current Kirby character
                 System.out.println("Skill description: " + Skills.kirbySkills.get(i).skillDescription);
                 System.out.println("Skill damage: " + Skills.kirbySkills.get(i).skillDamage);
+            }
+
+            for (int i = 0; i < Foods.kirbyFoods.size(); i ++) {
+                // TODO: change to read from current Kirby character
+                System.out.println("Skill description: " + Foods.kirbyFoods.get(i).foodName);
+                System.out.println("Skill damage: " + Foods.kirbyFoods.get(i).healAmount);
             }
         }
     }
@@ -72,12 +92,19 @@ public class CSMidterm {
                     String skillDescriptionInput = sc.next();
 
                     System.out.println("How much damage does this skill do?:\nEnter a number: ");
-                    int skillDamageInput = sc.nextInt();
+                    double skillDamageInput = sc.nextDouble();
 
                     a.createSkill(skillDescriptionInput, skillDamageInput);
                     break;
                 case 2:
-                    System.out.println("equip food");
+                    System.out.println("What's the name of your food?");
+                    String foodNameInput = sc.next();
+
+                    System.out.println("How much does your food heal?\nEnter a number:");
+                    double healAmountInput = sc.nextInt();
+
+                    a.createFood(foodNameInput, healAmountInput);
+
             }
 
 
