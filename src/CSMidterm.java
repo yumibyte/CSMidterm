@@ -10,46 +10,69 @@ public class CSMidterm {
 
     public static class Kirby extends Skills {
 
-        public String userName;
+        public String username;
+        public int health;
+
+        public String type;
         static ArrayList<Kirby> kirbyCharacters = new ArrayList<Kirby>();
 
 
-        Kirby(String userName) {
-            this.userName = userName;
-            this.skillDescription = skillDescription;
-            this.skillDamage = skillDamage;
+        Kirby(String username) {
+            this.health = 100;
+            this.username = username;
+//            this.skillDecription = skillDescription;
+//            this.skillDamage = skillDamage;
             kirbyCharacters.add(this);
         }
 
-        Kirby(String skillDescription, int skillDamage) {
-            this.skillDescription = skillDescription;
-            this.skillDamage = skillDamage;
-            kirbyCharacters.add(this);
-        }
+//        Kirby(String skillDescription, int skillDamage) {
+//            this.skillDescription = skillDescription;
+//            this.skillDamage = skillDamage;
+//            kirbyCharacters.add(this);
+//        }
 
         public void readInstances() {
 
             for (int i = 0; i < kirbyCharacters.size(); i ++) {
-                System.out.println("username: " + kirbyCharacters.get(i).userName);
+                // TODO: change to read from current Kirby character
+                System.out.println("username: " + kirbyCharacters.get(i).username);
                 System.out.println("character damage: " + kirbyCharacters.get(i).skillDamage);
             }
         }
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        while (true) {
+            Scanner sc = new Scanner(System.in);
 
-        System.out.println("What is your username?");
-        String userName = sc.next();
-        Kirby a = new Kirby(userName);
-        Kirby b = new Kirby("yumibyte");
+            System.out.println("Welcome to create a Kirby!\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*\n" +
+                    "What is your username?\n" +
+                    "Enter name: ");
 
-        a.skillDamage = 20;
-        a.skillDescription = "hi";
+            String username = sc.next();
+            Kirby a = new Kirby(username);
 
-        b.skillDamage = 40;
+            System.out.println("What skill type will your Kirby have?\n" +
+                    "1 - Bomb\n" +
+                    "2 - Magical\n" +
+                    "3 - Ice\n" +
+                    "Number input 1-3: ");
+            int userInputType = sc.nextInt();
+            switch (userInputType) {
+                case 1:
+                    a.type = "Bomb";
+                    break;
+                case 2:
+                    a.type = "Magical";
+                    break;
+                case 3:
+                    a.type = "Ice";
+                    break;
+            }
 
-        a.readInstances();
+            a.readInstances();
+        }
+
 
     }
 }
