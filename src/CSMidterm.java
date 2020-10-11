@@ -5,30 +5,36 @@ public class CSMidterm {
 
     public static class Foods {
         public static ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
-
         private String foodName;
         private double healAmount;
 
-        Foods(String foodName, double healAmount) {
+        protected void createFood(String foodName, double healAmount) {
             this.foodName = foodName;
             this.healAmount = healAmount;
             kirbyFoods.add(this);
         }
-    }
-    public static class Skills {
-        public static ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
 
+        protected ArrayList<Foods> readFoods() {
+            return kirbyFoods;
+        }
+    }
+
+    public static class Skills extends Foods {
+        public static ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
         private String skillDescription;
         private double skillDamage;
 
-        Skills(String skillDescription, double skillDamage) {
+        protected void createSkill(String skillDescription, double skillDamage) {
             this.skillDescription = skillDescription;
             this.skillDamage = skillDamage;
             kirbySkills.add(this);
         }
+        protected ArrayList<Skills> readSkills() {
+            return kirbySkills;
+        }
     }
 
-    public static class Kirby {
+    public static class Kirby extends Skills {
 
         private String username;
         private double health;
@@ -39,23 +45,15 @@ public class CSMidterm {
 //            kirbyCharacters.add(this);
         }
 
-        void createSkill(String skillDescription, double skillDamage) {
-            Skills skills = new Skills(skillDescription, skillDamage);
-        }
-
-        void createFood(String foodName, double foodHealh) {
-            Foods foods = new Foods(foodName, foodHealh);
-        }
-
-        public void readInstances() {
+        public void readStats() {
 
             // setup to read KirbyCharacters
+            System.out.println("CurrentStats\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
             System.out.println("username: " + this.username);
             System.out.println("health: " + this.health);
-
-            System.out.println("Kirby has " + Skills.kirbySkills.size() + " powerful skill(s)");
-            System.out.println("Kirby has " + Foods.kirbyFoods.size() + " yummy food(s) equipped");
-
+            System.out.println("Kirby has " + this.readSkills().size() + " powerful skill(s)");
+            System.out.println("Kirby has " + this.readFoods().size() + " yummy food(s) equipped\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+//            System.out.println("Kirby's level is " + kirbyLevel);
             /**
             for (int i = 0; i < Skills.kirbySkills.size(); i ++) {
                 // TODO: change to read from current Kirby character
@@ -84,7 +82,7 @@ public class CSMidterm {
 
         // initialize Kirby with username
         Kirby a = new Kirby(username);
-        a.readInstances();
+        a.readStats();
 
 
         while (true) {
@@ -114,7 +112,7 @@ public class CSMidterm {
                     a.createFood(foodNameInput, healAmountInput);
 
             }
-            a.readInstances();
+            a.readStats();
         }
 
 
