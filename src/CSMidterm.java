@@ -53,17 +53,23 @@ public class CSMidterm {
             System.out.println("username: " + this.username);
             System.out.println("health: " + this.health);
 
+            System.out.println("Kirby has " + Skills.kirbySkills.size() + " powerful skill(s)");
+            System.out.println("Kirby has " + Foods.kirbyFoods.size() + " yummy food(s) equipped");
+
+            /**
             for (int i = 0; i < Skills.kirbySkills.size(); i ++) {
                 // TODO: change to read from current Kirby character
-                System.out.println("Skill description: " + Skills.kirbySkills.get(i).skillDescription);
-                System.out.println("Skill damage: " + Skills.kirbySkills.get(i).skillDamage);
+//                System.out.println("Skill description: " + Skills.kirbySkills.get(i).skillDescription);
+//                System.out.println("Skill damage: " + Skills.kirbySkills.get(i).skillDamage);
             }
+
 
             for (int i = 0; i < Foods.kirbyFoods.size(); i ++) {
                 // TODO: change to read from current Kirby character
                 System.out.println("Skill description: " + Foods.kirbyFoods.get(i).foodName);
                 System.out.println("Skill damage: " + Foods.kirbyFoods.get(i).healAmount);
             }
+             **/
         }
     }
 
@@ -78,6 +84,8 @@ public class CSMidterm {
 
         // initialize Kirby with username
         Kirby a = new Kirby(username);
+        a.readInstances();
+
 
         while (true) {
 
@@ -106,9 +114,6 @@ public class CSMidterm {
                     a.createFood(foodNameInput, healAmountInput);
 
             }
-
-
-
             a.readInstances();
         }
 
