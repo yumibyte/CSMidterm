@@ -308,7 +308,7 @@ public class CSMidterm {
                     a.readSkills();
                     break;
                 case 4:
-                    a.readFoods();
+                   a.readFoods();
                     break;
                 case 5:
                     a.deleteSkill();
@@ -323,5 +323,3 @@ public class CSMidterm {
         }
     }
 }
-
-
