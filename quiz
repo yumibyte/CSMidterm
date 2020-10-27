@@ -1,0 +1,96 @@
+import java.util.*;
+
+public class Testing {
+
+    public static void main(String[] args) {
+        //Declares variables and data structures
+
+        // MARK -- 3 compiler errors, need semicolons
+        int i = 0;    //for running loops
+        int x = 0;    //top menu
+        int y = 0;   //nested menu
+        int z = 0;   //for multiplier or adder
+        String name;
+        ArrayList<Integer> temporary = new ArrayList<Integer>();
+        ArrayList<NumberSeries> objectsList = new ArrayList<NumberSeries>();
+        Scanner text = new Scanner(System.in);
+        Scanner number = new Scanner(System.in);
+        while(true) {       // MARK -- logical error. Needs to be wrapped in a while loop to take multiple inputs
+            //Beginning of actually doing stuff
+            System.out.println("Would you " + "like to: \n0-Create a new series\t1-Read an existing series\n");
+            x = number.nextInt();
+
+            //Asks user what kind of series is to be created.
+            if (x == 0) {
+                temporary.clear();//Clears out the temporary array list completely
+                System.out.println("What kind of series?\n0-Geometric\t1-Arithmatic"
+                        + "\t2-Fibonacci\n");
+                y = number.nextInt();
+                System.out.println("What do you want to name it?");
+                name = text.nextLine();     // MARK -- compiler error. Name is of type String. Needs to be nextLine() not nextInt()
+
+                //Asks user for multiplier or increment when not doing Fibonacci series.
+                if (y != 2) {               // MARK -- logical error. Has to be y not x because y will have the option number.
+                    System.out.println("What would you like the multiplier or added "
+                            + "amount to be? (Integers only please)");
+                    z = number.nextInt();
+                }
+
+                switch (y) {
+                    case 0://Constructs the geometric series and stores it to a temporary arraylist
+                        temporary.add(1);
+                        for (i = 1; i < 5; i++) {
+                            temporary.add(temporary.get(i - 1) * z);
+                        }
+                        break;
+                    case 1://Constructs the arithmetic series and stores it to a temporary arraylist
+                        temporary.add(1);
+                        for (i = 1; i < 5; i++) {       // MARK -- compiler error, replace commas with semicolons
+                            // MARK -- above was a runtime error. The for loop goes out of bounds and needs to be less than 5
+                            temporary.add(temporary.get(i - 1) + z);
+                        }
+                        break;
+                    case 2://Constructs the Fibonacci sequence and stores it to a temporary arraylist
+                        temporary.add(1);
+                        temporary.add(1);
+                        for (i = 2; i < 5; i++) {
+                            temporary.add((temporary.get(i - 2) + temporary.get(i - 1)));     // MARK -- runtime error. Out of range for the for loop, needs to start at 2, not 1
+                        }
+                        break;
+                }
+                NumberSeries newSeries = new NumberSeries(name, temporary);
+                objectsList.add(newSeries);
+
+
+            }
+            else if (x == 1) {      // MARK -- Compiler error. Needs to be set as "==" not "=" because we are comparing the values
+                for (int j = 0; j < objectsList.size(); j ++) {
+                    System.out.println(objectsList.get(j));
+                }		// read all objects
+
+            }
+            else {
+                System.out.println("The number you entered was out-of-range.");
+            }
+        }		// end for added while loop at top
+    }
+
+    public static class NumberSeries {
+
+        // initialize any variables for a sequence
+        private String name;
+        private ArrayList<Integer> arrayDataRetrieved = new ArrayList<Integer>();       // has to be an arrayList because the sequence is also an arraylist
+
+        public NumberSeries(String name, ArrayList<Integer> arrayDataRetrieved) {
+            this.name = name;
+            this.arrayDataRetrieved = arrayDataRetrieved;
+        }
+
+        @Override
+        public String toString() {
+            return ("\nName: " + name +
+                    "\nSequence: " + arrayDataRetrieved + "\n*************");
+        }
+    }       // MARK -- Compiler error. Missing bracket
+}           // MARK -- Compiler error. Missing bracket
+
