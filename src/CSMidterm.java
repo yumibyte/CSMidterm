@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class CSMidterm {
     public static class Foods implements Serializable {
         transient Scanner sc = new Scanner(System.in);
-        public ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
+        private ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
         private String foodName;
         private double healAmount;
 
@@ -62,7 +62,7 @@ public class CSMidterm {
 
     public static class Skills extends Foods implements Serializable {
         transient Scanner sc = new Scanner(System.in);
-        public ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
+        private ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
         private String skillDescription;
         private double skillDamage;
 
@@ -123,37 +123,12 @@ public class CSMidterm {
             this.username = username;
         }
 
-//        public void writeToFile() throws IOException {
-//            File myFile = new File("kirbyInfo.txt");
-//            if (myFile.createNewFile()) {
-//                System.out.println("made file: " + myFile.getName());
-//            } else {
-//                System.out.println("This file already exists. I'm going to write to this same file, kirbyInfo.txt, for you :)");
-//            }
-//
-//            try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
-//                 ObjectOutput s = new ObjectOutputStream(f)) {
-//                s.writeObject(this);
-//            } catch (IOException error) {
-//                error.printStackTrace();
-//            }
-//            System.out.println("Successfully saved game!");
-//        }
-
         private void writeToFile (ObjectOutputStream out) throws IOException {
 
-//            out.defaultWriteObject();
             out.writeObject(this);
-            out.writeObject(this.readFoodsList());
             out.close();
 
         }
-
-//        private void readObject(ObjectInputStream in) throws IOException,
-//                ClassNotFoundException {
-//            in.defaultReadObject();
-//            x = in.readInt();
-//        }
 
         protected Kirby readFile() throws IOException {
 
