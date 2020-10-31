@@ -381,6 +381,7 @@ public class CSMidterm {
                     System.out.println(mainKirby);
                     break;
                 case 8:
+                    // leave within try/catch so any errors return to this level from the writeToFile func
                     try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
                     ObjectOutputStream s = new ObjectOutputStream(f)) {
                         mainKirby.writeToFile(s);
