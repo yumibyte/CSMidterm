@@ -8,9 +8,9 @@ import java.util.Scanner;
 // NOTE -- you need to have the kirbyEatFood.txt file in the same directory for this project. It needs to be on the same level
 // as the code and should be accessible not within src but within the main folder of the project (same level as the .iml)
 public class CSMidterm {
-    public static class Foods {
-        Scanner sc = new Scanner(System.in);
-        private ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
+    public static class Foods implements Serializable {
+        transient Scanner sc = new Scanner(System.in);
+        public ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
         private String foodName;
         private double healAmount;
 
@@ -58,25 +58,11 @@ public class CSMidterm {
             Thread.sleep(1000);
 
         }
-
-        protected void readFullFoodsList() {
-
-            // TODO -- fix writing to file as individual lines
-//            String allFoodNames = "";
-//            for (int foodItem = 0; foodItem < kirbyFoods.size(); foodItem ++) {
-//                allFoodNames +=
-//            }
-//
-//            return ("FOODS_LIST_NUMBER\n" + this.kirbyFoods.size() + "\n" +
-//                    "FOOD_NAMES\n" + this.allFoodNames + "\n" +
-//                    "FOOD_HEAL_AMOUNT\n" + this.allHealAmounts
-//            );
-        }
     }
 
-    public static class Skills extends Foods {
-        Scanner sc = new Scanner(System.in);
-        private ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
+    public static class Skills extends Foods implements Serializable {
+        transient Scanner sc = new Scanner(System.in);
+        public ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
         private String skillDescription;
         private double skillDamage;
 
@@ -125,7 +111,7 @@ public class CSMidterm {
         }
     }
 
-    public static class Kirby  extends Skills implements Serializable {
+    public static class Kirby extends Skills implements Serializable {
 
         private String username;
         private double health;
@@ -137,50 +123,51 @@ public class CSMidterm {
             this.username = username;
         }
 
-        protected void writeToFile() throws IOException {
-            try {
-//                File myFile = new File("kirbyInfo.txt");
-//                if (myFile.createNewFile()) {
-//                    System.out.println("Created new game file " + myFile.getName());
-//                } else {
-//                    System.out.println("The file " + myFile.getName() + " already exists. You're info was written to this game file.");
-//                }
+//        public void writeToFile() throws IOException {
+//            File myFile = new File("kirbyInfo.txt");
+//            if (myFile.createNewFile()) {
+//                System.out.println("made file: " + myFile.getName());
+//            } else {
+//                System.out.println("This file already exists. I'm going to write to this same file, kirbyInfo.txt, for you :)");
+//            }
+//
+//            try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
+//                 ObjectOutput s = new ObjectOutputStream(f)) {
+//                s.writeObject(this);
+//            } catch (IOException error) {
+//                error.printStackTrace();
+//            }
+//            System.out.println("Successfully saved game!");
+//        }
 
-                FileWriter writer = new FileWriter("kirbyInfo.txt");
-                try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
-                    ObjectOutput s = new ObjectOutputStream(f)) {
-                    s.writeObject(this);
-                }
+        private void writeToFile (ObjectOutputStream out) throws IOException {
 
+//            out.defaultWriteObject();
+            out.writeObject(this);
+            out.writeObject(this.readFoodsList());
+            out.close();
 
-                // write to kirby file TODO -- this is trying to write to file as individual lines
-//                FileWriter writer = new FileWriter("kirbyInfo.txt");
-//                writer.write(
-//                        "USERNAME\n" + this.username + "\n" +
-//                        "DEFENSE\n" + this.defense + "\n" +
-//                        "OFFENSE\n" + this.offense + "\n" +
-//                        "HEALTH\n" + this.health + "\n" +
-//                        "SKILLS\n" + this.fullSkillsList + "\n" +
-//                        "FOODS\n" + this.readFoodsList());
-//                writer.close();
-//                System.out.println("Game successfully saved!");
-
-            } catch (IOException error) {
-                error.printStackTrace();
-            }
-
-            System.out.println("******* read");
         }
 
-        protected void readFile() throws IOException {
-            System.out.println("KIRBY READ STATS");
+//        private void readObject(ObjectInputStream in) throws IOException,
+//                ClassNotFoundException {
+//            in.defaultReadObject();
+//            x = in.readInt();
+//        }
+
+        protected Kirby readFile() throws IOException {
+
+            // needs to be returned later, so initialized outside of try/catch
+            Kirby loadedKirby = null;
             try(FileInputStream in = new FileInputStream("kirbyInfo.txt");
                 ObjectInputStream s = new ObjectInputStream(in)) {
-                System.out.println(s.readObject());
+                loadedKirby = (Kirby) s.readObject();
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            System.out.println("Loaded previous game!");
+            return loadedKirby;
         }
         @Override
         public String toString() {
@@ -228,6 +215,7 @@ public class CSMidterm {
                     "Kirby has " + foodsList.size() + " yummy food(s) equipped\n" +
                     "Offense level " + this.offense + "\t|\tDefense level " + this.defense + "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
         }
+
     }
 
     public static class GraphicsOptions {
@@ -314,6 +302,7 @@ public class CSMidterm {
         is simplified to only the core menu components
         */
         // create title
+
         GraphicsOptions graphics = new GraphicsOptions();
         graphics.createTitle();
 
@@ -333,17 +322,13 @@ public class CSMidterm {
         // initialize Kirby with username
         Kirby mainKirby = new Kirby(username);      // CCC - rename a to mainKirby instead of a so the main object we are dealing with is less ambiguous
         System.out.println(mainKirby);
-        while (true) {
+
+        // only changed when user choose to exit menu
+        boolean doNotExit = true;
+        while (doNotExit) {
             System.out.println("What would you like to do?\n" +
-                    "1 - Learn a new skill\t | " +
-                    "2 - Equip a new food\t | " +
-                    "3 - Read skills\t | " +
-                    "4 - Read foods equipped\t | " +
-                    "5 - Unequip Skill\t | " +
-                    "6 - Unequip Food\t | " +
-                    "7 - Save game\t | " +
-                    "8 - Load previous game\t | " +
-                    "9 - Exit program");
+                    "1 - Learn a new skill\t | " + "2 - Equip a new food\t | " + "3 - Read skills\t | " + "4 - Read foods equipped\t  |" + "5 - Unequip Skill\n" +
+                    "6 - Unequip Food\t     | " + "7 - Read stats\t     | " + "8 - Save game\t | " + "9 - Load game\t          |" + "10 - Exit game");
             int userInputChoice = sc.nextInt();
 
             switch (userInputChoice) {
@@ -397,6 +382,7 @@ public class CSMidterm {
                     // utilized txt file in order to effectively pull images in the least # of lines
                     // placed retrieving method for reading file in main rather than Foods so Foods focuses on modifying objects while any
                     // additional formatting for the user is performed on the main class
+
                     graphics.kirbyFoodAnimation();        // will print ASCII animation. CCC - changed so printing from the text file is a separate method
                     System.out.println("Food obtained!");
                     Thread.sleep(500);
@@ -417,12 +403,24 @@ public class CSMidterm {
                     mainKirby.deleteFood();
                     break;
                 case 7:
-                    mainKirby.writeToFile();
+                    System.out.println(mainKirby);
                     break;
                 case 8:
-                    mainKirby.readFile();
+                    try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
+                    ObjectOutputStream s = new ObjectOutputStream(f)) {
+                        mainKirby.writeToFile(s);
+
+                    } catch (IOException error) {
+                        error.printStackTrace();
+                    }
+                    System.out.println("Successfully saved game!");
+                    break;
                 case 9:
-                    System.out.println(mainKirby);
+                    mainKirby = mainKirby.readFile();
+                    break;
+                case 10:
+                    System.out.println("Goodbye, " + mainKirby.username + "!");
+                    doNotExit = false;
                     break;
             }
         }
