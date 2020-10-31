@@ -58,20 +58,6 @@ public class CSMidterm {
             Thread.sleep(1000);
 
         }
-
-        protected void readFullFoodsList() {
-
-            // TODO -- fix writing to file as individual lines
-//            String allFoodNames = "";
-//            for (int foodItem = 0; foodItem < kirbyFoods.size(); foodItem ++) {
-//                allFoodNames +=
-//            }
-//
-//            return ("FOODS_LIST_NUMBER\n" + this.kirbyFoods.size() + "\n" +
-//                    "FOOD_NAMES\n" + this.allFoodNames + "\n" +
-//                    "FOOD_HEAL_AMOUNT\n" + this.allHealAmounts
-//            );
-        }
     }
 
     public static class Skills extends Foods {
@@ -139,31 +125,12 @@ public class CSMidterm {
 
         protected void writeToFile() throws IOException {
             try {
-//                File myFile = new File("kirbyInfo.txt");
-//                if (myFile.createNewFile()) {
-//                    System.out.println("Created new game file " + myFile.getName());
-//                } else {
-//                    System.out.println("The file " + myFile.getName() + " already exists. You're info was written to this game file.");
-//                }
 
                 FileWriter writer = new FileWriter("kirbyInfo.txt");
                 try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
                     ObjectOutput s = new ObjectOutputStream(f)) {
                     s.writeObject(this);
                 }
-
-
-                // write to kirby file TODO -- this is trying to write to file as individual lines
-//                FileWriter writer = new FileWriter("kirbyInfo.txt");
-//                writer.write(
-//                        "USERNAME\n" + this.username + "\n" +
-//                        "DEFENSE\n" + this.defense + "\n" +
-//                        "OFFENSE\n" + this.offense + "\n" +
-//                        "HEALTH\n" + this.health + "\n" +
-//                        "SKILLS\n" + this.fullSkillsList + "\n" +
-//                        "FOODS\n" + this.readFoodsList());
-//                writer.close();
-//                System.out.println("Game successfully saved!");
 
             } catch (IOException error) {
                 error.printStackTrace();
@@ -333,7 +300,10 @@ public class CSMidterm {
         // initialize Kirby with username
         Kirby mainKirby = new Kirby(username);      // CCC - rename a to mainKirby instead of a so the main object we are dealing with is less ambiguous
         System.out.println(mainKirby);
-        while (true) {
+
+        // only changed when user choose to exit menu
+        boolean shouldExit = true;
+        while (shouldExit) {
             System.out.println("What would you like to do?\n" +
                     "1 - Learn a new skill\t | " + "2 - Equip a new food\t | " + "3 - Read skills\t | " + "4 - Read foods equipped\t  |" + "5 - Unequip Skill\n" +
                     "6 - Unequip Food\t     | " + "7 - Read stats\t     | " + "8 - Save game\t | " + "9 - Load game\t          |" + "10 - Exit game");
@@ -419,6 +389,7 @@ public class CSMidterm {
                     break;
                 case 10:
                     System.out.println("Goodbye, " + mainKirby.username + "!");
+                    shouldExit = false;
                     break;
             }
         }
