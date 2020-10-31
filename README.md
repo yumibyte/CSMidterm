@@ -23,7 +23,7 @@
 * I created this project for my IB Computer Science class.
 
 ## Use the Program
-* Run this project through the java file located in the src folder
+* Run this project through the java file located in the src folder.
 
 ## Tutorial for how the Saving/Reloading Game Data Functionality Works
 * https://ashraigosa.medium.com/saving-and-reloading-data-with-file-serialization-in-java-74b79630ec81
