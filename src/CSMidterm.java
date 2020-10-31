@@ -335,15 +335,8 @@ public class CSMidterm {
         System.out.println(mainKirby);
         while (true) {
             System.out.println("What would you like to do?\n" +
-                    "1 - Learn a new skill\t | " +
-                    "2 - Equip a new food\t | " +
-                    "3 - Read skills\t | " +
-                    "4 - Read foods equipped\t | " +
-                    "5 - Unequip Skill\t | " +
-                    "6 - Unequip Food\t | " +
-                    "7 - Save game\t | " +
-                    "8 - Load previous game\t | " +
-                    "9 - Exit program");
+                    "1 - Learn a new skill\t | " + "2 - Equip a new food\t | " + "3 - Read skills\t | " + "4 - Read foods equipped\t  |" + "5 - Unequip Skill\n" +
+                    "6 - Unequip Food\t     | " + "7 - Read stats\t     | " + "8 - Save game\t | " + "9 - Load game\t          |" + "10 - Exit game");
             int userInputChoice = sc.nextInt();
 
             switch (userInputChoice) {
@@ -417,12 +410,15 @@ public class CSMidterm {
                     mainKirby.deleteFood();
                     break;
                 case 7:
-                    mainKirby.writeToFile();
+                    System.out.println(mainKirby);
                     break;
                 case 8:
-                    mainKirby.readFile();
+                    mainKirby.writeToFile();
                 case 9:
-                    System.out.println(mainKirby);
+                    mainKirby.readFile();
+                    break;
+                case 10:
+                    System.out.println("Goodbye, " + mainKirby.username + "!");
                     break;
             }
         }
