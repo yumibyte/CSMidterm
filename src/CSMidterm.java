@@ -1,8 +1,7 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -36,13 +35,16 @@ public class CSMidterm {
         protected void readFoods() {
             System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 
-            for (int i = 0; i < kirbyFoods.size(); i ++) {
-                int currentFood = i + 1;
+            // CLEAN CODE CORRECTION (CCC)
+            for (int foodItem = 0; foodItem < kirbyFoods.size(); foodItem ++) {     // change i to foodItem so it is easy to tell it's taking each object in kirbyFoods
+                int currentFood = foodItem + 1;
                 System.out.println("Food number " + currentFood);
-                System.out.println("    - Food Title: " + kirbyFoods.get(i).foodName);
-                System.out.println("    - Heal Amount: " + kirbyFoods.get(i).healAmount + "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+                System.out.println("    - Food Title: " + kirbyFoods.get(foodItem).foodName);
+                System.out.println("    - Heal Amount: " + kirbyFoods.get(foodItem).healAmount + "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
             }
         }
+
+
         protected void deleteFood() throws InterruptedException {       // handle exception for Thread.sleep
             System.out.println("*In a rush, you drop the food*");
             Thread.sleep(2000);
@@ -55,6 +57,20 @@ public class CSMidterm {
             System.out.println("You have successfully dropped a food item. Hopefully you won't need it for later...");
             Thread.sleep(1000);
 
+        }
+
+        protected void readFullFoodsList() {
+
+            // TODO -- fix writing to file as individual lines
+//            String allFoodNames = "";
+//            for (int foodItem = 0; foodItem < kirbyFoods.size(); foodItem ++) {
+//                allFoodNames +=
+//            }
+//
+//            return ("FOODS_LIST_NUMBER\n" + this.kirbyFoods.size() + "\n" +
+//                    "FOOD_NAMES\n" + this.allFoodNames + "\n" +
+//                    "FOOD_HEAL_AMOUNT\n" + this.allHealAmounts
+//            );
         }
     }
 
@@ -82,11 +98,12 @@ public class CSMidterm {
 
             System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
 
-            for (int i = 0; i < kirbySkills.size(); i ++) {
-                int currentSkill = i + 1;
+            // CCC - change i to skillItem so it's clear we are retrieving each skill object from kirbySkills
+            for (int skillItem = 0; skillItem < kirbySkills.size(); skillItem ++) {
+                int currentSkill = skillItem + 1;
                 System.out.println("Skill number " + currentSkill + ": ");
-                System.out.println("    - Skill Description: " + kirbySkills.get(i).skillDescription);
-                System.out.println("    - Skill Damage: " + kirbySkills.get(i).skillDamage + "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+                System.out.println("    - Skill Description: " + kirbySkills.get(skillItem).skillDescription);
+                System.out.println("    - Skill Damage: " + kirbySkills.get(skillItem).skillDamage + "\n*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
             }
         }
 
@@ -108,7 +125,7 @@ public class CSMidterm {
         }
     }
 
-    public static class Kirby extends Skills {
+    public static class Kirby  extends Skills implements Serializable {
 
         private String username;
         private double health;
@@ -120,6 +137,51 @@ public class CSMidterm {
             this.username = username;
         }
 
+        protected void writeToFile() throws IOException {
+            try {
+//                File myFile = new File("kirbyInfo.txt");
+//                if (myFile.createNewFile()) {
+//                    System.out.println("Created new game file " + myFile.getName());
+//                } else {
+//                    System.out.println("The file " + myFile.getName() + " already exists. You're info was written to this game file.");
+//                }
+
+                FileWriter writer = new FileWriter("kirbyInfo.txt");
+                try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
+                    ObjectOutput s = new ObjectOutputStream(f)) {
+                    s.writeObject(this);
+                }
+
+
+                // write to kirby file TODO -- this is trying to write to file as individual lines
+//                FileWriter writer = new FileWriter("kirbyInfo.txt");
+//                writer.write(
+//                        "USERNAME\n" + this.username + "\n" +
+//                        "DEFENSE\n" + this.defense + "\n" +
+//                        "OFFENSE\n" + this.offense + "\n" +
+//                        "HEALTH\n" + this.health + "\n" +
+//                        "SKILLS\n" + this.fullSkillsList + "\n" +
+//                        "FOODS\n" + this.readFoodsList());
+//                writer.close();
+//                System.out.println("Game successfully saved!");
+
+            } catch (IOException error) {
+                error.printStackTrace();
+            }
+
+            System.out.println("******* read");
+        }
+
+        protected void readFile() throws IOException {
+            System.out.println("KIRBY READ STATS");
+            try(FileInputStream in = new FileInputStream("kirbyInfo.txt");
+                ObjectInputStream s = new ObjectInputStream(in)) {
+                System.out.println(s.readObject());
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
         @Override
         public String toString() {
             ArrayList<Skills> skillsList = this.readSkillsList();
@@ -129,11 +191,14 @@ public class CSMidterm {
             int totalDamage = 0;
             int totalHeal = 0;
 
-            for (int i = 0; i < skillsList.size(); i ++) {
-                totalDamage += skillsList.get(i).skillDamage;
+            // CCC - changed i to skillItem like the previous for loop. Makes it easy to understand this loop retrieces each object in foodsList.
+            for (int skillItem = 0; skillItem < skillsList.size(); skillItem ++) {
+                totalDamage += skillsList.get(skillItem).skillDamage;
             }
-            for (int j = 0; j < foodsList.size(); j ++) {
-                totalHeal += foodsList.get(j).healAmount;
+
+            // CCC - changed j to foodItem like the previous for loop. Makes it easy to understand this loop retrieces each object in foodsList.
+            for (int foodItem = 0; foodItem < foodsList.size(); foodItem ++) {
+                totalHeal += foodsList.get(foodItem).healAmount;
             }
 
             if (totalDamage < 50) {
@@ -141,7 +206,8 @@ public class CSMidterm {
             }
             else if (totalDamage < 200) {
                 this.offense = "novice";
-            } else {
+            }
+            else {
                 this.offense = "all powerful boss";
             }
 
@@ -150,7 +216,8 @@ public class CSMidterm {
             }
             else if (totalHeal < 200) {
                 this.defense = "novice";
-            } else {
+            }
+            else {
                 this.defense = "all powerful boss";
             }
 
@@ -163,39 +230,96 @@ public class CSMidterm {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException {        // throw necessary if Thread.sleep fails of retrieving from the file fails
-        BufferedImage image = new BufferedImage(320, 32, BufferedImage.TYPE_INT_RGB);       // set to a very long title
-        Graphics g = image.getGraphics();       // any graphics will be displayed on this object
-        g.setFont(new Font("Dialog", Font.PLAIN, 15));
-        Graphics2D graphics = (Graphics2D) g;
-        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,     // smooth jagged edges with rendering options
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        graphics.drawString("Welcome to Kirby!", 6, 24);
+    public static class GraphicsOptions {
 
-        for (int y = 0; y < 32; y++) {
-            StringBuilder sb = new StringBuilder();
+        public void createTitle() {
+            BufferedImage image = new BufferedImage(320, 32, BufferedImage.TYPE_INT_RGB);       // set to a very long title
+            Graphics g = image.getGraphics();       // any graphics will be displayed on this object
+            g.setFont(new Font("Dialog", Font.PLAIN, 15));
+            Graphics2D graphics = (Graphics2D) g;
+            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,     // smooth jagged edges with rendering options
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            graphics.drawString("Welcome to Kirby!", 6, 24);
 
-            for (int x = 0; x < 144; x++)
-                sb.append(image.getRGB(x, y) == -16777216 ? " " : image.getRGB(x, y) == -1 ? "#" : "*");        // there are 16777216 possible chars and set the formatting for ASCII drawings
-            if (sb.toString().trim().isEmpty()) continue;
-            System.out.println(sb.toString());
+            for (int y = 0; y < 32; y++) {
+                StringBuilder sb = new StringBuilder();
+
+                for (int x = 0; x < 144; x++)
+                    sb.append(image.getRGB(x, y) == -16777216 ? " " : image.getRGB(x, y) == -1 ? "#" : "*");        // there are 16777216 possible chars and set the formatting for ASCII drawings
+                if (sb.toString().trim().isEmpty()) continue;
+                System.out.println(sb.toString());
+            }
         }
+
+        public void printKirbyASCII() {
+            // print line by line since there aren't multiple frames to print. Wait before printing in main
+            System.out.println("              @@@@@@@@@.....            ");
+            System.out.println("         @,,,,,@,,,,,,,,,,,,,,*@        ");
+            System.out.println("       /,,,,,,,,,,#*,,,,,,,,,,,,@.      ");
+            System.out.println("      /*,,,,,,,,,@ @,,,,,,,,,,,,,@..    ");
+            System.out.println("      /@,,,,,,,,##@,,,,&@@#,,,,,,@..    ");
+            System.out.println("       @,,////,,,,,,,,,,,,////,,,,,@... ");
+            System.out.println("    ####%*#%#@,,,,,///%,,,,,,,,,,,,,,,# ");
+            System.out.println("   #&&&&&&&####%,,,,,,,,,,,,,,,,,,,,,/@ ");
+            System.out.println("   &&&&&&&&&&%##%@,,,,,,,,,,,,@////(@   ");
+            System.out.println("   @&&&&&&&&&&&%#@,,,,,,,,,,//*&##@     ");
+            System.out.println("     @&&&&&&&&&##(////////*@#######@    ");
+            System.out.println("       &@&&&&&&@.......@&&&########%    ");
+            System.out.println("...... .       ............@@&&&&%@     ");
+            System.out.println("..........     ......  .............    ");
+        }
+
+        public void createLoadingBar() throws InterruptedException {
+            System.out.println("/");
+            Thread.sleep(1000);
+            System.out.println("-");
+            Thread.sleep(1000);
+            System.out.println("\\");
+            Thread.sleep(1000);
+            System.out.println("|");
+            Thread.sleep(1000);
+            System.out.println("Skill obtained!");
+            Thread.sleep(500);
+        }
+
+        public void kirbyFoodAnimation() throws IOException {
+            try (BufferedReader br = new BufferedReader(new FileReader("kirbyEatFood.txt"))) {
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+
+                while (line != null) {
+                    if (line.equals("Break")) {
+                        Thread.sleep(1000);     // wait between each frame
+                        System.out.println(sb.toString());
+                        sb.setLength(0);        // clear StringBuilder before printing next frame
+                        line = br.readLine();
+                    } else {
+                        sb.append(line);
+                        sb.append(System.lineSeparator());
+                        line = br.readLine();
+                    }
+                }
+            } catch (InterruptedException | IOException error) {      // CCC - rename e to error so its less ambiguous
+                error.printStackTrace();        // catch any exceptions thrown by Thread.sleep and file opening/closing
+            }
+        }
+    }
+
+
+
+    public static void main(String[] args) throws IOException, InterruptedException {        // throw necessary if Thread.sleep fails of retrieving from the file fails
+
+        /* CCC - change any graphics to being performed within the graphics class.
+        This was done so it is clear where all graphics are located. Graphics is in its own class so main
+        is simplified to only the core menu components
+        */
+        // create title
+        GraphicsOptions graphics = new GraphicsOptions();
+        graphics.createTitle();
+
         Thread.sleep(2000);
-        // print line by line since there aren't multiple frames to print. Wait before printing
-        System.out.println("              @@@@@@@@@.....            ");
-        System.out.println("         @,,,,,@,,,,,,,,,,,,,,*@        ");
-        System.out.println("       /,,,,,,,,,,#*,,,,,,,,,,,,@.      ");
-        System.out.println("      /*,,,,,,,,,@ @,,,,,,,,,,,,,@..    ");
-        System.out.println("      /@,,,,,,,,##@,,,,&@@#,,,,,,@..    ");
-        System.out.println("       @,,////,,,,,,,,,,,,////,,,,,@... ");
-        System.out.println("    ####%*#%#@,,,,,///%,,,,,,,,,,,,,,,# ");
-        System.out.println("   #&&&&&&&####%,,,,,,,,,,,,,,,,,,,,,/@ ");
-        System.out.println("   &&&&&&&&&&%##%@,,,,,,,,,,,,@////(@   ");
-        System.out.println("   @&&&&&&&&&&&%#@,,,,,,,,,,//*&##@     ");
-        System.out.println("     @&&&&&&&&&##(////////*@#######@    ");
-        System.out.println("       &@&&&&&&@.......@&&&########%    ");
-        System.out.println("...... .       ............@@&&&&%@     ");
-        System.out.println("..........     ......  .............    ");
+
+        graphics.printKirbyASCII();
 
         // MARK -- end of intro with title and create object
         // Begin by creating user then enter forever loop of creating skills/equipping food
@@ -207,8 +331,8 @@ public class CSMidterm {
         String username = sc.next();
 
         // initialize Kirby with username
-        Kirby a = new Kirby(username);
-        System.out.println(a);
+        Kirby mainKirby = new Kirby(username);      // CCC - rename a to mainKirby instead of a so the main object we are dealing with is less ambiguous
+        System.out.println(mainKirby);
         while (true) {
             System.out.println("What would you like to do?\n" +
                     "1 - Learn a new skill\t | " +
@@ -217,7 +341,9 @@ public class CSMidterm {
                     "4 - Read foods equipped\t | " +
                     "5 - Unequip Skill\t | " +
                     "6 - Unequip Food\t | " +
-                    "7 - Read stats");
+                    "7 - Save game\t | " +
+                    "8 - Load previous game\t | " +
+                    "9 - Exit program");
             int userInputChoice = sc.nextInt();
 
             switch (userInputChoice) {
@@ -226,34 +352,29 @@ public class CSMidterm {
                     System.out.println("1 - Create your own skill\t|\t" +
                             "2 - Create default skill");
                     int optionInput = sc.nextInt();
+
+
                     if (optionInput == 1) {
                         System.out.println("What is a description of this great power you are about to obtain?");
                         String skillDescriptionInput = sc.next();
 
                         System.out.println("How much damage does this skill do?:\nEnter a number: ");
                         double skillDamageInput = sc.nextDouble();
-                        a.createSkill(skillDescriptionInput, skillDamageInput);
+                        mainKirby.createSkill(skillDescriptionInput, skillDamageInput);
                     } else {
-                        a.createDefaultSkill();
+                        mainKirby.createDefaultSkill();
                     }
 
                     System.out.println("*You feel your Kirby powers strengthen as you steal the power of a magical beast*");
-                    System.out.println("/");
-                    Thread.sleep(1000);
-                    System.out.println("-");
-                    Thread.sleep(1000);
-                    System.out.println("\\");
-                    Thread.sleep(1000);
-                    System.out.println("|");
-                    Thread.sleep(1000);
-                    System.out.println("Skill obtained!");
-                    Thread.sleep(500);
-                    System.out.println(a);
+
+                    graphics.createLoadingBar();        // CCC - loading bar moved to GraphicsOptions class to simplify code
+                    System.out.println(mainKirby);
+
                     Thread.sleep(2000);
                     break;
 
                 case 2:
-                    System.out.println("Good job " + a.username + ", you must be able to heal up when fighting the final boss!" +
+                    System.out.println("Good job " + mainKirby.username + ", you must be able to heal up when fighting the final boss!" +
                             "\n1 - Create your own food\t|\t" +
                             "2 - Create default food");
                     optionInput = sc.nextInt();
@@ -265,9 +386,9 @@ public class CSMidterm {
                         System.out.println("How much does your food heal?\nEnter a number:");
                         double healAmountInput = sc.nextInt();
 
-                        a.createFood(foodNameInput, healAmountInput);
+                        mainKirby.createFood(foodNameInput, healAmountInput);
                     } else {
-                        a.createDefaultFood();
+                        mainKirby.createDefaultFood();
                     }
 
                     System.out.println("*Currently inhaling food*");
@@ -276,48 +397,32 @@ public class CSMidterm {
                     // utilized txt file in order to effectively pull images in the least # of lines
                     // placed retrieving method for reading file in main rather than Foods so Foods focuses on modifying objects while any
                     // additional formatting for the user is performed on the main class
-                    BufferedReader br = new BufferedReader(new FileReader("kirbyEatFood.txt"));
-                    try {
-                        StringBuilder sb = new StringBuilder();
-                        String line = br.readLine();
-
-                        while (line != null) {
-                            if (line.equals("Break")) {
-                                Thread.sleep(1000);     // wait between each frame
-                                System.out.println(sb.toString());
-                                sb.setLength(0);        // clear StringBuilder before printing next frame
-                                line = br.readLine();
-                            } else {
-                                sb.append(line);
-                                sb.append(System.lineSeparator());
-                                line = br.readLine();
-                            }
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();        // catch any exceptions thrown by Thread.sleep and file opening/closing
-                    } finally {
-                        br.close();
-                    }
+                    graphics.kirbyFoodAnimation();        // will print ASCII animation. CCC - changed so printing from the text file is a separate method
                     System.out.println("Food obtained!");
                     Thread.sleep(500);
-                    System.out.println(a);
+                    System.out.println(mainKirby);
                     Thread.sleep(2000);     // wait before displaying menu
 
                     break;
                 case 3:
-                    a.readSkills();
+                    mainKirby.readSkills();
                     break;
                 case 4:
-                    a.readFoods();
+                    mainKirby.readFoods();
                     break;
                 case 5:
-                    a.deleteSkill();
+                    mainKirby.deleteSkill();
                     break;
                 case 6:
-                    a.deleteFood();
+                    mainKirby.deleteFood();
                     break;
                 case 7:
-                    System.out.println(a);
+                    mainKirby.writeToFile();
+                    break;
+                case 8:
+                    mainKirby.readFile();
+                case 9:
+                    System.out.println(mainKirby);
                     break;
             }
         }
