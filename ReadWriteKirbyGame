@@ -60,7 +60,7 @@ public class CSMidterm {
         }
     }
 
-    public static class Skills extends Foods {
+    public static class Skills extends Foods implements Serializable {
         transient Scanner sc = new Scanner(System.in);
         private ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
         private String skillDescription;
@@ -111,7 +111,7 @@ public class CSMidterm {
         }
     }
 
-    public static class Kirby extends Skills {
+    public static class Kirby extends Skills implements Serializable {
 
         private String username;
         private double health;
@@ -402,5 +402,3 @@ public class CSMidterm {
         }
     }
 }
-
-
