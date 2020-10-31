@@ -156,7 +156,6 @@ public class CSMidterm {
 //        }
 
         protected Kirby readFile() throws IOException {
-            System.out.println("KIRBY READ STATS");
 
             // needs to be returned later, so initialized outside of try/catch
             Kirby loadedKirby = null;
@@ -167,6 +166,7 @@ public class CSMidterm {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            System.out.println("Loaded previous game!");
             return loadedKirby;
         }
         @Override
@@ -302,15 +302,13 @@ public class CSMidterm {
         is simplified to only the core menu components
         */
         // create title
-        // TODO - uncomment
 
         GraphicsOptions graphics = new GraphicsOptions();
-//        graphics.createTitle();
+        graphics.createTitle();
 
-        // TODO - uncomment
-//        Thread.sleep(2000);
+        Thread.sleep(2000);
 
-//        graphics.printKirbyASCII();
+        graphics.printKirbyASCII();
 
         // MARK -- end of intro with title and create object
         // Begin by creating user then enter forever loop of creating skills/equipping food
@@ -384,13 +382,12 @@ public class CSMidterm {
                     // utilized txt file in order to effectively pull images in the least # of lines
                     // placed retrieving method for reading file in main rather than Foods so Foods focuses on modifying objects while any
                     // additional formatting for the user is performed on the main class
-//                    TODO -- uncomment
-//
-//                    graphics.kirbyFoodAnimation();        // will print ASCII animation. CCC - changed so printing from the text file is a separate method
-//                    System.out.println("Food obtained!");
-//                    Thread.sleep(500);
-//                    System.out.println(mainKirby);
-//                    Thread.sleep(2000);     // wait before displaying menu
+
+                    graphics.kirbyFoodAnimation();        // will print ASCII animation. CCC - changed so printing from the text file is a separate method
+                    System.out.println("Food obtained!");
+                    Thread.sleep(500);
+                    System.out.println(mainKirby);
+                    Thread.sleep(2000);     // wait before displaying menu
 
                     break;
                 case 3:
@@ -416,11 +413,10 @@ public class CSMidterm {
                     } catch (IOException error) {
                         error.printStackTrace();
                     }
-
+                    System.out.println("Successfully saved game!");
                     break;
                 case 9:
                     mainKirby = mainKirby.readFile();
-                    System.out.println(mainKirby.kirbyFoods);
                     break;
                 case 10:
                     System.out.println("Goodbye, " + mainKirby.username + "!");
