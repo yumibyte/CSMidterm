@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class CSMidterm {
     public static class Foods {
         Scanner sc = new Scanner(System.in);
-        private ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
+        public ArrayList<Foods> kirbyFoods = new ArrayList<Foods>();
         private String foodName;
         private double healAmount;
 
@@ -62,7 +62,7 @@ public class CSMidterm {
 
     public static class Skills extends Foods {
         Scanner sc = new Scanner(System.in);
-        private ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
+        public ArrayList<Skills> kirbySkills = new ArrayList<Skills>();
         private String skillDescription;
         private double skillDamage;
 
@@ -124,19 +124,18 @@ public class CSMidterm {
         }
 
         protected void writeToFile() throws IOException {
-            try {
+            try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
+                ObjectOutput s = new ObjectOutputStream(f)) {
+                s.writeObject(this);
 
-                FileWriter writer = new FileWriter("kirbyInfo.txt");
-                try (FileOutputStream f = new FileOutputStream("kirbyInfo.txt");
-                    ObjectOutput s = new ObjectOutputStream(f)) {
-                    s.writeObject(this);
-                }
+//                ArrayList<Foods> foodsArrayList = this.readFoodsList();
+//                ArrayList<Skills> skillsArrayList = this.readSkillsList();
 
             } catch (IOException error) {
                 error.printStackTrace();
             }
 
-            System.out.println("******* read");
+            System.out.println("Successfully saved game!");
         }
 
         protected void readFile() throws IOException {
@@ -302,7 +301,7 @@ public class CSMidterm {
         System.out.println(mainKirby);
 
         // only changed when user choose to exit menu
-        boolean shouldExit = true;
+        boolean shouldExit = false;
         while (shouldExit) {
             System.out.println("What would you like to do?\n" +
                     "1 - Learn a new skill\t | " + "2 - Equip a new food\t | " + "3 - Read skills\t | " + "4 - Read foods equipped\t  |" + "5 - Unequip Skill\n" +
@@ -384,12 +383,13 @@ public class CSMidterm {
                     break;
                 case 8:
                     mainKirby.writeToFile();
+                    break;
                 case 9:
                     mainKirby.readFile();
                     break;
                 case 10:
                     System.out.println("Goodbye, " + mainKirby.username + "!");
-                    shouldExit = false;
+                    shouldExit = true;
                     break;
             }
         }
